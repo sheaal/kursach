@@ -1,0 +1,21 @@
+/* color palette from <https://github.com/vuejs/theme> */
+:root {
+
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+
+}
+
+a{
+  text-decoration: none;
+  color: #7F85BC;
+}
