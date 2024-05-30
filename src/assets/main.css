@@ -1,6 +1,53 @@
 @import './base.css';
 
-#app {
-
+.container{
+    padding: 0 200px;
 }
 
+.header{
+    display: flex;
+    justify-content: right;
+    height: 60px;
+    padding: 10px 200px;
+    background: var(--block-background-color);
+}
+
+.main{
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
+.post-list{
+    max-width: 540px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-auth {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border-radius: 10px;
+    padding: 20px;
+    max-width: 640px;
+    width: 100%;
+    border: 2px solid transparent;
+    background: linear-gradient(var(--block-background-color), var(--block-background-color)) padding-box, linear-gradient(145deg, transparent 35%,#e81cff, var(--primary-color)) ;
+    background-size: 200% 200%;
+    animation: gradient 5s ease infinite;
+}
+
+@keyframes gradient {
+    0% {
+        background-position: 20% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 30% 50%;
+    }
+}

@@ -1,6 +1,47 @@
-/* color palette from <https://github.com/vuejs/theme> */
 :root {
+  --primary-color: #7F85BC;  /* Основной цвет */
+  --main-background-color: #0C0E14; /* Основной цвет фона */
+  --text-color: #FFFFFF;  /* Цвет текста */
+  --block-background-color: #0F1118;   /* Цвет фона блоков (постов, комментов, шапки и т.д.) */
+  --block-hover-background-color: #141520;   /* Цвет фона блоков при наведении (постов, комментов и т.д.) */
+}
 
+[theme="dark"] {
+  --primary-color: #7F85BC;  /* Основной цвет */
+  --main-background-color: #0C0E14; /* Основной цвет фона */
+  --text-color: #FFFFFF;  /* Цвет текста */
+  --block-background-color: #0F1118;   /* Цвет фона блоков (постов, комментов, шапки и т.д.) */
+  --block-hover-background-color: #141520;   /* Цвет фона блоков при наведении (постов, комментов и т.д.) */
+}
+
+/*
+[theme="light"]{
+  --main-background-color: #F3F4F7;
+  --text-color: #141520;
+  --block-background-color: #FFFFFF;
+  --block-hover-background-color: #EBEDFF;
+}
+*/
+
+@font-face {
+  font-family: 'Roboto';
+  src: url('@/assets/fonts/Roboto-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url('@/assets/fonts/Roboto-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url('@/assets/fonts/Roboto-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
 }
 
 *,
@@ -12,10 +53,33 @@
 }
 
 body {
+  font-family: 'Roboto', sans-serif;
+  background: var(--main-background-color);
+}
 
+body::-webkit-scrollbar {
+  width: 8px;
+}
+
+body::-webkit-scrollbar-track {
+  background: none;
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: var(--primary-color);
+  border-radius: 20px;
 }
 
 a{
   text-decoration: none;
-  color: #7F85BC;
+  color: var(--primary-color);
+}
+
+input, textarea, button{
+  outline: none;
+  border: none;
+}
+
+img{
+  display: block;
 }

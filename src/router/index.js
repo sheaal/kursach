@@ -1,57 +1,51 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import Homecomp from '@/components/Homecomp.vue'
-import Aboutcomp from '@/components/Aboutcomp.vue'
-import Registrationcomp from "@/components/Registrationcomp.vue";
-import Authorizationcomp from "@/components/Authorizationcomp.vue";
-import Tapecomp from "@/components/Tapecomp.vue";
-import Commentcomp from "@/components/Commentcomp.vue";
-import Profilecomp from "@/components/Profilecomp.vue";
-import Subscriberscomp from "@/components/Subscriberscomp.vue";
+import { createRouter, createWebHistory } from 'vue-router';
+import FeedView from "@/views/FeedView.vue";
+import RegistrationView from "@/views/RegistrationView.vue";
+import AuthorizationView from "@/views/AuthorizationView.vue";
+import ProfileView from "@/views/ProfileView.vue";
+import SubscribersView from "@/views/SubscribersView.vue";
+import LikesView from "@/views/LikesView.vue";
+import PostView from "@/views/PostView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/home',
-      name: 'home',
-      component: Homecomp
-    },
-    {
-      path: '/about',
-      name: 'about',
-      component: Aboutcomp
+      path: '/',
+      name: 'feed',
+      component: FeedView
     },
     {
       path: '/register',
       name: 'register',
-      component: Registrationcomp
+      component: RegistrationView
     },
     {
       path: '/login',
       name: 'login',
-      component: Authorizationcomp
+      component: AuthorizationView
     },
     {
-      path: '/tape',
-      name: 'tape',
-      component: Tapecomp
-    },
-    {
-      path: '/comment',
-      name: 'comment',
-      component: Commentcomp
+      path: '/post/:postId',
+      name: 'post',
+      component: PostView
     },
     {
       path: '/profile',
       name: 'profile',
-      component: Profilecomp
+      component: ProfileView
     },
     {
       path: '/subscribers',
       name: 'subscribers',
-      component: Subscriberscomp
+      component: SubscribersView
+    },
+    {
+      path: '/likes',
+      name: 'likes',
+      component: LikesView
     }
   ]
-})
+});
 
-export default router
+export default router;
