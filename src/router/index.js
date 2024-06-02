@@ -6,6 +6,8 @@ import ProfileView from "@/views/ProfileView.vue";
 import SubscribersView from "@/views/SubscribersView.vue";
 import LikesView from "@/views/LikesView.vue";
 import PostView from "@/views/PostView.vue";
+import SettingsView from "@/views/SettingsView.vue";
+import RightView from "@/views/RightView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -18,12 +20,12 @@ const router = createRouter({
     {
       path: '/register',
       name: 'register',
-      component: RegistrationView
+      component: RegistrationView,
     },
     {
       path: '/login',
       name: 'login',
-      component: AuthorizationView
+      component: AuthorizationView,
     },
     {
       path: '/post/:postId',
@@ -33,19 +35,45 @@ const router = createRouter({
     {
       path: '/profile',
       name: 'profile',
-      component: ProfileView
+      component: ProfileView,
+      meta: { auth: true }
     },
     {
       path: '/subscribers',
       name: 'subscribers',
-      component: SubscribersView
+      component: SubscribersView,
+      meta: { auth: true }
     },
     {
       path: '/likes',
       name: 'likes',
-      component: LikesView
+      component: LikesView,
+      meta: { auth: true }
+    },
+    {
+      path: '/settings',
+      name: 'settings',
+      component: SettingsView,
+      meta: { auth: true }
+    },
+    {
+      path: '/right',
+      name: 'right',
+      component: RightView,
+      meta: { auth: true }
     }
   ]
+});
+
+// Проверка авторизации
+router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem('token');
+
+  if (to.matched.some(record => record.meta.auth) && !token) {
+    next({ name: 'login' });
+  } else {
+    next();
+  }
 });
 
 export default router;

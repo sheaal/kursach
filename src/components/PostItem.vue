@@ -7,7 +7,7 @@ import ButtonLite from "@/components/ui/ButtonLite.vue";
   <article class="post">
     <div class="post__header">
       <div class="post-head__content">
-        <img class="user-avarar" src="@/assets/img/семга.png" alt="photo"/>
+        <img class="user-avarar" src="@/assets/img/UserAvatarDefault.png" alt="photo"/>
         <p class="user-name">Сергей Дульцев</p>
       </div>
       <ButtonLite>

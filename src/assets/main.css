@@ -1,15 +1,13 @@
 @import './base.css';
 
-.container{
-    padding: 0 200px;
+.error{
+    color: var(--text-color);
+    font-size: 14px;
+    font-weight: 400;
 }
 
-.header{
-    display: flex;
-    justify-content: right;
-    height: 60px;
-    padding: 10px 200px;
-    background: var(--block-background-color);
+.container{
+    padding: 0 200px;
 }
 
 .main{
@@ -38,6 +36,25 @@
     background: linear-gradient(var(--block-background-color), var(--block-background-color)) padding-box, linear-gradient(145deg, transparent 35%,#e81cff, var(--primary-color)) ;
     background-size: 200% 200%;
     animation: gradient 5s ease infinite;
+}
+
+.dropdown-item{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0 10px 10px;
+    width: 100%;
+}
+
+.dropdown-item:hover{
+    background: var(--block-hover-background-color);
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.input-default{
+    border-radius: 10px;
+    background-color: var(--block-hover-background-color);
 }
 
 @keyframes gradient {

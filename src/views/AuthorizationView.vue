@@ -1,17 +1,43 @@
 <script setup>
 import ButtonDefault from "@/components/ui/ButtonDefault.vue";
-import InputDefault from "@/components/ui/InputDefault.vue";
+import { ref } from "vue";
+import { login } from "@/api/authorization.js";
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+
+const email = ref('');
+const password = ref('');
+const errorMessage = ref('');
+
+async function loginSubmit() {
+  const loginData = {
+    email: email.value,
+    password: password.value
+  };
+
+  const { token, error } = await login(loginData);
+  if (token) {
+    router.push('/');
+  } else {
+    errorMessage.value = error;
+  }
+
+  loginData.email = "";
+  loginData.password = "";
+}
 </script>
 
 <template>
   <main class="main">
-    <form class="form-auth">
-      <InputDefault class="form__input" type="email" placeholder="Электронная почта" required />
-      <InputDefault class="form__input" type="password" placeholder="Пароль" required />
+    <form class="form-auth" @submit.prevent="loginSubmit">
+      <input class="form__input input-default" v-model="email" type="email" placeholder="Электронная почта" required />
+      <input class="form__input input-default" v-model="password" type="password" placeholder="Пароль" required />
       <div class="form__middle">
-        <ButtonDefault class="form__btn form__auth">Авторизоваться</ButtonDefault>
+        <ButtonDefault type="submit" class="form__btn form__auth">Авторизоваться</ButtonDefault>
         <router-link class="form__link form__link--password" to="/forgot-password">Забыли пароль?</router-link>
       </div>
+      <p v-if="errorMessage.value" class="error">{{ errorMessage.value }}</p>
       <p class="main__text">
         Впервые на сайте? <router-link class="form__link form__link--account" to="/register">Создать аккаунт</router-link>
       </p>

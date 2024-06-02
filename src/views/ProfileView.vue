@@ -2,6 +2,33 @@
 import HeaderApp from "@/components/HeaderApp.vue";
 import SidebarBlock from "@/components/SidebarBlock.vue";
 import PostItem from "@/components/PostItem.vue";
+import { onMounted, ref } from "vue";
+import { getUser } from "@/api/user.js";
+
+const userData = ref({});
+const posts = ref([]);
+const userId = localStorage.getItem("userId");
+
+async function getUserInfo(userId) {
+  try {
+    const data = await getUser(userId);
+    userData.value = data[0];
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+  }
+}
+
+function formatDate(data) {
+  const date = new Date(data);
+  const options = { day: 'numeric', month: 'long', year: 'numeric' };
+  return date.toLocaleDateString('ru-RU', options);
+}
+
+onMounted(() => {
+  if (userId) {
+    getUserInfo(userId);
+  }
+});
 </script>
 
 <template>
@@ -9,38 +36,44 @@ import PostItem from "@/components/PostItem.vue";
   <section class="container">
     <SidebarBlock></SidebarBlock>
     <main class="main profile">
-      <section class="profile-header__block">
-        <img class="profile-head-avatar" src="@/assets/img/back_photo.png" alt="head-avatar"/>
-        <img class="profile-avatar" src="@/assets/img/семга.png" alt="avatar"/>
-        <div class="profile-body">
-          <h2 class="profile-body__name">Сергей Дульцев</h2>
-          <div class="profile-body__content">
-            <p class="profile-body__item">100 подписчики</p>
+      <section class="profile-header__block" v-if="userData">
+        <div class="profile-header__content">
+          <img class="profile-head-avatar" v-if="!userData.profile_head_avatar_url === null" src="#" alt="head-avatar"/>
+          <img class="profile-head-avatar" v-show="userData.profile_head_avatar_url === null" src="@/assets/img/HeadAvatarDefault.png" alt="head-avatar"/>
+          <img class="profile-avatar" v-if="userData.profile_avatar_url" src="#" alt="avatar"/>
+          <img class="profile-avatar" v-show="!userData.profile_avatar_url" src="@/assets/img/UserAvatarDefault.png" alt="avatar"/>
+        </div>
+        <div class="profile-body__content">
+          <h2 class="profile-body__name">{{ userData.name }} {{ userData.surname }}</h2>
+          <div class="profile-body__list">
+            <p class="profile-body__item">100 подписчиков</p>
             <p class="profile-body__item">100 подписок</p>
           </div>
         </div>
       </section>
-      <section class="profile-body__block">
+      <section class="profile-body__block" v-if="userData">
         <div class="profile-about">
           <h2 class="profile-about__title">О себе</h2>
           <div class="profile-about__info">
-            <p class="profile-about__item">Профессиональный алкаш</p>
+            <p class="profile-about__item" v-if="userData.role === 1">Администратор</p>
+            <p class="profile-about__item" v-if="userData.role === 2">Пользователь</p>
+            <p class="profile-about__item" v-if="userData.about">{{ userData.about }}</p>
+            <p class="profile-about__item" v-show="!userData.about">Пользователь не поставил статус</p>
             <div class="profile-about__block">
-              <p class="profile-about__item">Cоздан аккаунт:</p>
-              <p class="profile-about__item">1 сентября 2025</p>
+              <p class="profile-about__item">Создан аккаунт:</p>
+              <p class="profile-about__item">{{ formatDate(userData.registration_date) }}</p>
             </div>
             <div class="profile-about__block">
               <p class="profile-about__item">День рождения:</p>
-              <p class="profile-about__item">1 сентября 2004 (119 лет)</p>
+              <p class="profile-about__item">{{ formatDate(userData.birthdate) }} ({{ userData.age }} лет)</p>
             </div>
           </div>
         </div>
-        <div class="post-list">
-          <PostItem></PostItem>
-          <PostItem></PostItem>
-          <PostItem></PostItem>
-          <PostItem></PostItem>
-          <PostItem></PostItem>
+        <div class="post-list" v-if="posts.length > 0">
+          <PostItem v-for="post in posts" :key="post.id" :post="post" />
+        </div>
+        <div class="post-list" v-else>
+          <div class="posts-message">Постов нет</div>
         </div>
       </section>
     </main>
@@ -48,7 +81,6 @@ import PostItem from "@/components/PostItem.vue";
 </template>
 
 <style>
-
 .profile{
   display: flex;
   flex-direction: column;
@@ -56,11 +88,14 @@ import PostItem from "@/components/PostItem.vue";
 }
 
 .profile-header__block{
-  position: relative;
   max-width: 920px;
   width: 100%;
   background-color: var(--block-background-color);
   border-radius: 10px;
+}
+
+.profile-header__content{
+  position: relative;
 }
 
 .profile-head-avatar{
@@ -71,20 +106,24 @@ import PostItem from "@/components/PostItem.vue";
 .profile-avatar{
   position: absolute;
   top: 60px;
-  left: 400px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
   border-radius: 50%;
   width: 120px;
   height: 120px;
 }
 
-.profile-body{
+.profile-body__content{
   display: flex;
   flex-direction: column;
   gap: 10px;
   padding: 20px;
 }
 
-.profile-body__content{
+.profile-body__list{
   display: flex;
   gap: 10px;
 }
@@ -134,5 +173,16 @@ import PostItem from "@/components/PostItem.vue";
   font-weight: 400;
   font-size: 12px;
   color: var(--text-color);
+}
+
+.posts-message{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background-color: var(--block-background-color);
+  border-radius: 10px;
+  padding: 20px;
+  width: 100%;
+  color: var(--primary-color);
 }
 </style>

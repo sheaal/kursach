@@ -14,14 +14,12 @@
   --block-hover-background-color: #141520;   /* Цвет фона блоков при наведении (постов, комментов и т.д.) */
 }
 
-/*
 [theme="light"]{
   --main-background-color: #F3F4F7;
   --text-color: #141520;
   --block-background-color: #FFFFFF;
   --block-hover-background-color: #EBEDFF;
 }
-*/
 
 @font-face {
   font-family: 'Roboto';
@@ -55,9 +53,11 @@
 body {
   font-family: 'Roboto', sans-serif;
   background: var(--main-background-color);
+  position: relative;
 }
 
 body::-webkit-scrollbar {
+  box-sizing: content-box;
   width: 8px;
 }
 

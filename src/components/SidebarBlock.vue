@@ -1,6 +1,9 @@
 <script setup>
 import { useRouter } from 'vue-router';
 
+const token = localStorage.getItem('token');
+const userRole = parseInt(localStorage.getItem('userRole'));
+
 const router = useRouter();
 const isActiveNavItem = (route) => {
   return router.currentRoute.value.path === route;
@@ -9,7 +12,7 @@ const isActiveNavItem = (route) => {
 
 <template>
   <div class="sidebar">
-    <nav class="nav-list">
+    <nav class="nav-list" v-show="token">
       <RouterLink to="/profile" class="nav-item" :class="{'nav-item__active': isActiveNavItem('/profile')}">
         <img class="nav-item__icon" src="../assets/img/icon/person.png" alt="profile"/>
         <a class="nav-item__content">Профиль</a>
@@ -26,9 +29,15 @@ const isActiveNavItem = (route) => {
         <img class="nav-item__icon" src="../assets/img/icon/like.png" alt="likes"/>
         <a class="nav-item__content">Понравившиеся</a>
       </RouterLink>
-      <RouterLink to="/login" class="nav-item" :class="{'nav-item__active': isActiveNavItem('/login')}">
-        <img class="nav-item__icon" src="@/assets/img/icon/exit.png" alt="login"/>
-        <a class="nav-item__content">Авторизация</a>
+      <RouterLink to="/right" class="nav-item" v-show="userRole === 1" :class="{'nav-item__active': isActiveNavItem('/right')}">
+        <img class="nav-item__icon" src="../assets/img/icon/right_of_access.png" alt="likes"/>
+        <a class="nav-item__content">Дать права</a>
+      </RouterLink>
+    </nav>
+    <nav class="nav-list" v-if="!token">
+      <RouterLink to="/" class="nav-item" :class="{'nav-item__active': isActiveNavItem('/')}">
+        <img class="nav-item__icon" src="../assets/img/icon/web_asset.png" alt="feed"/>
+        <a class="nav-item__content">Лента</a>
       </RouterLink>
     </nav>
   </div>
