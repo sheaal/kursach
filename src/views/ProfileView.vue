@@ -12,9 +12,13 @@ const userId = localStorage.getItem("userId");
 async function getUserInfo(userId) {
   try {
     const data = await getUser(userId);
-    userData.value = data[0];
+    userData.value = data;
   } catch (error) {
-    console.error("Error fetching user data:", error);
+    if (error.response.status === 404) {
+      console.error("User not found");
+    } else {
+      console.error("Error fetching user data:", error);
+    }
   }
 }
 

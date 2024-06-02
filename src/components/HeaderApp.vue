@@ -3,10 +3,29 @@ import ButtonLite from "@/components/ui/ButtonLite.vue";
 import ButtonDefault from "@/components/ui/ButtonDefault.vue";
 import DropdownBlock from "@/components/ui/DropdownBlock.vue";
 import {useTheme} from "@/composables/useTheme.js";
+import {getUser} from "@/api/user.js";
+import {onMounted, ref} from "vue";
 
+const userData = ref({});
 const token = localStorage.getItem('token');
+const userId = localStorage.getItem("userId");
 
 const { theme, setTheme } = useTheme();
+
+async function getUserInfo(userId) {
+  try {
+    const data = await getUser(userId);
+    userData.value = data;
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+  }
+}
+
+onMounted(() => {
+  if (userId) {
+    getUserInfo(userId);
+  }
+});
 
 const toggleTheme = () => {
   const newTheme = theme.value === 'light' ? 'dark' : 'light';
@@ -30,7 +49,7 @@ const toggleTheme = () => {
         </button-lite>
 
         <div class="profile__content" v-if="token">
-          <p class="profile__name">Сергей Дульцев</p>
+          <p class="profile__name">{{ userData.name }} {{ userData.surname }}</p>
           <img class="profile__avatar" src="@/assets/img/UserAvatarDefault.png" alt="avatar" >
           <DropdownBlock class="profile__dropdown-content">
             <RouterLink to="/settings" class="dropdown-item">
