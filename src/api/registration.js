@@ -6,6 +6,7 @@ export async function register(registerData) {
             {
             headers: {
                 'Content-Type': 'application/json',
+                'Accept': 'application/json',
             },
             withCredentials: true
         });

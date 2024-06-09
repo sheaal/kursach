@@ -15,6 +15,10 @@
   display: inline-block;
   text-align: center;
   border-radius: 10px;
+  background-color: var(--defaul-button-background-color);
+  cursor: pointer;
+}
+.button-default:hover{
   background-color: var(--block-hover-background-color);
   cursor: pointer;
 }

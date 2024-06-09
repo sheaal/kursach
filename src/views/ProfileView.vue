@@ -2,22 +2,36 @@
 import HeaderApp from "@/components/HeaderApp.vue";
 import SidebarBlock from "@/components/SidebarBlock.vue";
 import PostItem from "@/components/PostItem.vue";
+import ButtonLite from "@/components/ui/ButtonLite.vue";
 import { onMounted, ref } from "vue";
 import { getUser } from "@/api/user.js";
+import { getUserPost } from "@/api/post.js";
 
 const userData = ref({});
 const posts = ref([]);
 const userId = localStorage.getItem("userId");
+const token = localStorage.getItem("token");
 
 async function getUserInfo(userId) {
   try {
     const data = await getUser(userId);
     userData.value = data;
   } catch (error) {
-    if (error.response.status === 404) {
+    if (error.response && error.response.status === 404) {
       console.error("User not found");
+    }
+  }
+}
+
+async function getPost(userId) {
+  try {
+    const data = await getUserPost(userId);
+    posts.value = data;
+  } catch (error) {
+    if (error.response && error.response.status === 404) {
+      console.error("Posts not found for user");
     } else {
-      console.error("Error fetching user data:", error);
+      console.error("Error fetching posts data:", error);
     }
   }
 }
@@ -31,6 +45,7 @@ function formatDate(data) {
 onMounted(() => {
   if (userId) {
     getUserInfo(userId);
+    getPost(userId);
   }
 });
 </script>
@@ -44,14 +59,20 @@ onMounted(() => {
         <div class="profile-header__content">
           <img class="profile-head-avatar" v-if="!userData.profile_head_avatar_url === null" src="#" alt="head-avatar"/>
           <img class="profile-head-avatar" v-show="userData.profile_head_avatar_url === null" src="@/assets/img/HeadAvatarDefault.png" alt="head-avatar"/>
+          <img class="profile-head-avatar" src="@/assets/img/HeadAvatarDefault.png" alt="head-avatar"/>
           <img class="profile-avatar" v-if="userData.profile_avatar_url" src="#" alt="avatar"/>
           <img class="profile-avatar" v-show="!userData.profile_avatar_url" src="@/assets/img/UserAvatarDefault.png" alt="avatar"/>
         </div>
         <div class="profile-body__content">
-          <h2 class="profile-body__name">{{ userData.name }} {{ userData.surname }}</h2>
+          <h2 class="profile-body__name">{{ userData.full_name }}</h2>
           <div class="profile-body__list">
-            <p class="profile-body__item">100 подписчиков</p>
-            <p class="profile-body__item">100 подписок</p>
+            <p class="profile-body__item">{{userData.subscriptions_count}} подписчиков</p>
+            <p class="profile-body__item">{{userData.subscriber_count}} подписок</p>
+          </div>
+          <div class="profile-body__button" v-if="token === ''">
+            <ButtonLite style="margin-top: 10px; width: 40px; height: 40px; display: flex; justify-content: right;" @click="">
+                <img src="@/assets/img/icon/person_add.png" alt="Иконка подписки">
+            </ButtonLite>
           </div>
         </div>
       </section>
@@ -74,7 +95,7 @@ onMounted(() => {
           </div>
         </div>
         <div class="post-list" v-if="posts.length > 0">
-          <PostItem v-for="post in posts" :key="post.id" :post="post" />
+          <PostItem v-for="post in posts" :key="post.post_id" :post="post" />
         </div>
         <div class="post-list" v-else>
           <div class="posts-message">Постов нет</div>
@@ -148,7 +169,10 @@ onMounted(() => {
   font-weight: 400;
   font-size: 12px;
 }
-
+.profile-body__button{
+  display: flex;
+  justify-content: flex-end;
+}
 .profile-about{
   display: flex;
   flex-direction: column;

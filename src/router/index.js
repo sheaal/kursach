@@ -8,6 +8,7 @@ import LikesView from "@/views/LikesView.vue";
 import PostView from "@/views/PostView.vue";
 import SettingsView from "@/views/SettingsView.vue";
 import RightView from "@/views/RightView.vue";
+import CreatePostView from "@/views/CreatePostView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -28,7 +29,7 @@ const router = createRouter({
       component: AuthorizationView,
     },
     {
-      path: '/post/:postId',
+      path: '/post',
       name: 'post',
       component: PostView
     },
@@ -60,6 +61,12 @@ const router = createRouter({
       path: '/right',
       name: 'right',
       component: RightView,
+      meta: { auth: true }
+    },
+    {
+      path: '/create_post',
+      name: 'create_post',
+      component: CreatePostView,
       meta: { auth: true }
     }
   ]

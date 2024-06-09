@@ -2,34 +2,15 @@
 import ButtonLite from "@/components/ui/ButtonLite.vue";
 import ButtonDefault from "@/components/ui/ButtonDefault.vue";
 import DropdownBlock from "@/components/ui/DropdownBlock.vue";
-import {useTheme} from "@/composables/useTheme.js";
-import {getUser} from "@/api/user.js";
-import {onMounted, ref} from "vue";
+import { logout } from "@/api/logout.js";
+import { toggleTheme } from "@//composables/useTheme.js"
 
-const userData = ref({});
 const token = localStorage.getItem('token');
-const userId = localStorage.getItem("userId");
+const userName = localStorage.getItem("userName");
+const userSurname = localStorage.getItem("userSurname");
 
-const { theme, setTheme } = useTheme();
-
-async function getUserInfo(userId) {
-  try {
-    const data = await getUser(userId);
-    userData.value = data;
-  } catch (error) {
-    console.error("Error fetching user data:", error);
-  }
-}
-
-onMounted(() => {
-  if (userId) {
-    getUserInfo(userId);
-  }
-});
-
-const toggleTheme = () => {
-  const newTheme = theme.value === 'light' ? 'dark' : 'light';
-  setTheme(newTheme);
+const changeTheme = () => {
+  toggleTheme();
 };
 </script>
 
@@ -39,24 +20,24 @@ const toggleTheme = () => {
 
       <div class="header-middle">
         <input type="text" class="input-default search-input" placeholder="Поиск" required />
-        <ButtonDefault class="post-create">Создать пост</ButtonDefault>
+        <ButtonDefault class="post-create" @click="$router.push('/create_post')">Создать пост</ButtonDefault>
       </div>
 
       <div class="profile-info">
 
-        <button-lite>
-          <img class="header__theme-image" @click="toggleTheme()" src="@/assets/img/icon/theme.png" alt="theme">
+        <button-lite @click="changeTheme()">
+          <img class="header__theme-image" src="@/assets/img/icon/theme.png" alt="theme">
         </button-lite>
 
         <div class="profile__content" v-if="token">
-          <p class="profile__name">{{ userData.name }} {{ userData.surname }}</p>
+          <p class="profile__name">{{ userName }} {{ userSurname }}</p>
           <img class="profile__avatar" src="@/assets/img/UserAvatarDefault.png" alt="avatar" >
           <DropdownBlock class="profile__dropdown-content">
             <RouterLink to="/settings" class="dropdown-item">
               <img class="profile__dropdown-item-icon" src="@/assets/img/icon/settings.png" alt="settings">
               <a class="profile__dropdown-item-link">Настройки</a>
             </RouterLink>
-            <RouterLink to="/" class="dropdown-item">
+            <RouterLink to="/" class="dropdown-item" @click="logout">
               <img class="profile__dropdown-item-icon" src="@/assets/img/icon/exit.png" alt="exit">
               <a class="profile__dropdown-item-link">Выход</a>
             </RouterLink>
@@ -85,14 +66,13 @@ const toggleTheme = () => {
   justify-content: space-between;
   width: 100%;
   align-items: center;
-  padding: 10px 0 10px 620px;
+  padding: 10px 0 10px 0;
 }
 
 .header-middle{
   display: flex;
   gap: 10px;
   flex-grow: 1;
-  margin: 0 159px 0 0;
   max-width: 540px;
   width: 100%;
   height: 40px;
@@ -172,5 +152,24 @@ const toggleTheme = () => {
   width: 40px;
   height: 40px;
   border-radius: 10px;
+}
+
+
+
+body[data-theme="light"] {
+  background-color: #222;
+  color: #fff;
+}
+/* body[data-theme="dark"] {
+  background-color: #222;
+  color: #fff;
+} */
+
+
+
+@media screen and (max-width: 768px) {
+  .header-middle{
+    padding: 0 30px;
+  }
 }
 </style>

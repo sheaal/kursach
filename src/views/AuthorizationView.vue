@@ -62,7 +62,7 @@ async function loginSubmit() {
 }
 
 .form__input {
-  width: 100%;
+  
   padding: 12px 10px;
   border-radius: 10px;
   color: var(--text-color);

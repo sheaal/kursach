@@ -1,34 +1,41 @@
 <script setup>
 
 import ButtonLite from "@/components/ui/ButtonLite.vue";
+import { defineProps } from 'vue';
+
+const props = defineProps({
+  post: Object
+});
+
+const post = props.post;
 </script>
 
 <template>
-  <article class="post">
-    <div class="post__header">
-      <div class="post-head__content">
-        <img class="user-avarar" src="@/assets/img/UserAvatarDefault.png" alt="photo"/>
-        <p class="user-name">Сергей Дульцев</p>
+    <article class="post">
+      <div class="post__header">
+        <div class="post-head__content">
+          <img class="user-avarar" src="@/assets/img/UserAvatarDefault.png" alt="photo"/>
+          <p class="user-name">{{ post.user_name }}</p>
+        </div>
+        <ButtonLite>
+          <img class="sub-menu" src="../assets/img/icon/menu.png" alt="menu"/>
+        </ButtonLite>
       </div>
-      <ButtonLite>
-        <img class="sub-menu" src="../assets/img/icon/menu.png" alt="menu"/>
-      </ButtonLite>
-    </div>
-    <div class="post__body">
-      <p class="post__text">Семга и Сосиска</p>
-      <img class="post__img" src="@/assets/img/post.png" alt="photo" />
-    </div>
-    <div class="post__footer">
-      <div class="post__footer-item">
-        <img class="post__icon" src="@/assets/img/icon/like.png" alt="photo" />
-        <p class="post__count">1</p>
+      <div class="post__body">
+        <p class="post__text">{{ post.text_content }}</p>
+        <img v-if="post.media_content !== null" class="post__img" :src="post.media_content" alt="photo" />
       </div>
-      <div class="post__footer-item">
-        <img class="post__icon" src="@/assets/img/icon/comment.png" alt="photo" />
-        <p class="post__count">2</p>
+      <div class="post__footer">
+        <div class="post__footer-item">
+          <img class="post__icon" src="@/assets/img/icon/like.png" alt="photo" />
+          <p class="post__count">{{ post.count_like }}</p>
+        </div>
+        <div class="post__footer-item">
+          <img class="post__icon" src="@/assets/img/icon/comment.png" alt="photo" />
+          <p class="post__count">{{ post.count_comment }}</p>
+        </div>
       </div>
-    </div>
-  </article>
+    </article>
 </template>
 
 <style scoped>
@@ -103,8 +110,6 @@ import ButtonLite from "@/components/ui/ButtonLite.vue";
   border-radius:10px;
   padding: 7px 10px;
 }
-
-
 .post__count{
   font-weight: 400;
   font-size: 14px;
@@ -115,4 +120,6 @@ import ButtonLite from "@/components/ui/ButtonLite.vue";
   width: 16px;
   height: 16px;
 }
+
+
 </style>
