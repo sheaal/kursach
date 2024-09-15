@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export async function logout() {
     try {
-        const token = localStorage.getItem('token');
+        const token = Сookie.get('token');
 
         const response = await axios.post(
             `${import.meta.env.VITE_API_URL}/logout`,
@@ -18,7 +18,7 @@ export async function logout() {
             const message = response.data.message;
 
             if (message) {
-                localStorage.removeItem('token');
+                Сookie.remove('token');
             }
 
             return message;

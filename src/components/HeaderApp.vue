@@ -2,16 +2,33 @@
 import ButtonLite from "@/components/ui/ButtonLite.vue";
 import ButtonDefault from "@/components/ui/ButtonDefault.vue";
 import DropdownBlock from "@/components/ui/DropdownBlock.vue";
+import { ref } from "vue";
 import { logout } from "@/api/logout.js";
 import { toggleTheme } from "@//composables/useTheme.js"
+import { searchUser } from "@/api/user";
 
-const token = localStorage.getItem('token');
-const userName = localStorage.getItem("userName");
-const userSurname = localStorage.getItem("userSurname");
+const searchText = ref("");
+const searchResults = ref([]);
+const user = ref({});
+const token = Сookie.get('token');
 
 const changeTheme = () => {
   toggleTheme();
 };
+
+async function getSearchUser(){
+  try {
+    const response = await searchUser(searchText.value);
+    searchResults.value = response;
+    if (response.error) {
+      console.error("Ошибка:", response.error);
+      return;
+    }
+    searchText.value = ""; // Очистить поле ввода
+  } catch (error) {
+    console.error("Ошибка:", error);
+  }
+}
 </script>
 
 <template>
@@ -19,7 +36,13 @@ const changeTheme = () => {
     <div class="header__content">
 
       <div class="header-middle">
-        <input type="text" class="input-default search-input" placeholder="Поиск" required />
+        <input type="text" class="input-default search-input" v-model="searchText" placeholder="Поиск" @keyup.enter="getSearchUser" required />
+        <p> {{ user.search_content }}</p>
+        <div v-if="searchResults.length > 0" class="search-results">
+          <DropdownBlock class="profile__dropdown-content2" v-for="search in searchResults" :key="search.id">
+            <router-link :to="`/profile/${search.id}`">{{ search.name }}</router-link>
+          </DropdownBlock>
+        </div>
         <ButtonDefault class="post-create" @click="$router.push('/create_post')">Создать пост</ButtonDefault>
       </div>
 
@@ -30,7 +53,7 @@ const changeTheme = () => {
         </button-lite>
 
         <div class="profile__content" v-if="token">
-          <p class="profile__name">{{ userName }} {{ userSurname }}</p>
+          <p class="profile__name">{{ userFullName }}</p>
           <img class="profile__avatar" src="@/assets/img/UserAvatarDefault.png" alt="avatar" >
           <DropdownBlock class="profile__dropdown-content">
             <RouterLink to="/settings" class="dropdown-item">
@@ -51,7 +74,6 @@ const changeTheme = () => {
           </RouterLink>
         </div>
       </div>
-
     </div>
   </header>
 </template>
@@ -70,6 +92,7 @@ const changeTheme = () => {
 }
 
 .header-middle{
+  position: relative;
   display: flex;
   gap: 10px;
   flex-grow: 1;
@@ -77,7 +100,15 @@ const changeTheme = () => {
   width: 100%;
   height: 40px;
 }
-
+.search-results {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  border: 1px solid #ccc;
+  border-radius: 7px;
+  margin: 2px;
+  z-index: 5;
+}
 .search-input{
   width: 355px;
   height: 40px;

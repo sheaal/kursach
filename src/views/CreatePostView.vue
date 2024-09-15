@@ -22,7 +22,6 @@ async function createPostSubmit(){
   const { message: successMessage, error } = await createPost(postData);
   if (successMessage) {
     message.value = successMessage;
-    console.log("Success message:", successMessage);
     router.push('/profile');
   } else {
     errorMessage.value = error;

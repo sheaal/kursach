@@ -9,8 +9,7 @@ import { getUserPost } from "@/api/post.js";
 
 const userData = ref({});
 const posts = ref([]);
-const userId = localStorage.getItem("userId");
-const token = localStorage.getItem("token");
+const token = Сookie.get("token");
 
 async function getUserInfo(userId) {
   try {
@@ -23,7 +22,7 @@ async function getUserInfo(userId) {
   }
 }
 
-async function getPost(userId) {
+async function getPosts(userId) {
   try {
     const data = await getUserPost(userId);
     posts.value = data;
@@ -45,7 +44,7 @@ function formatDate(data) {
 onMounted(() => {
   if (userId) {
     getUserInfo(userId);
-    getPost(userId);
+    getPosts(userId);
   }
 });
 </script>

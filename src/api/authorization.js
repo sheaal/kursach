@@ -13,13 +13,10 @@ export async function login(loginData) {
 
         if (response.data) {
             const data = response.data;
-            const token = response.data.token;
-            console.log(response.data);
-            localStorage.setItem('token', data.token);
-            localStorage.setItem('userId', data.userId);
+            const token = response.data.auth_token;
+            Сookie.set('token', data.auth_token);
             localStorage.setItem('userRole', data.userRole);
-            localStorage.setItem('userName', data.userName);
-            localStorage.setItem('userSurname', data.userSurname);
+            localStorage.setItem('userFullName', data.userFullName);
             return { token, error: null };
         } else {
             const errorMessage = response.data && response.data.error ? response.data.error : 'failed';

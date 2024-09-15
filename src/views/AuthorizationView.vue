@@ -20,6 +20,7 @@ async function loginSubmit() {
   if (token) {
     router.push('/');
   } else {
+    console.error("Login Error:", error);
     errorMessage.value = error;
   }
 
@@ -33,13 +34,15 @@ async function loginSubmit() {
     <form class="form-auth" @submit.prevent="loginSubmit">
       <input class="form__input input-default" v-model="email" type="email" placeholder="Электронная почта" required />
       <input class="form__input input-default" v-model="password" type="password" placeholder="Пароль" required />
-      <div class="form__middle">
-        <ButtonDefault type="submit" class="form__btn form__auth">Авторизоваться</ButtonDefault>
-        <router-link class="form__link form__link--password" to="/forgot-password">Забыли пароль?</router-link>
+     <div v-if="errorMessage" class="error-message">
+        {{ errorMessage }}
       </div>
-      <p v-if="errorMessage.value" class="error">{{ errorMessage.value }}</p>
+      <div class="form__middle">
+        <ButtonDefault type="submit" class="formbtn formauth">Авторизоваться</ButtonDefault>
+        <router-link class="formlink formlink--password" to="/forgot-password">Забыли пароль?</router-link>
+      </div>
       <p class="main__text">
-        Впервые на сайте? <router-link class="form__link form__link--account" to="/register">Создать аккаунт</router-link>
+        Впервые на сайте? <router-link class="formlink formlink--account" to="/register">Создать аккаунт</router-link>
       </p>
     </form>
   </main>

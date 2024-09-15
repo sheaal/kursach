@@ -3,7 +3,7 @@ import axios from "axios";
 // Создание поста
 export async function createPost(postData) {
     try {
-        const token = localStorage.getItem("token");
+        const token = Сookie.get("token");
         const response = await axios.post(`${import.meta.env.VITE_API_URL}/posts`, postData,
             {
             headers: {
@@ -45,5 +45,45 @@ export async function getUserPost(userId) {
         }
     } catch (error) {
         return error;
+    }
+}
+
+// Получение одного поста пользователя
+export async function getPost(Id) {
+    try {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/posts/${Id}`,
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            withCredentials: true
+        });
+        if (response.data) {
+            return response.data;
+        } else {
+            const errorMessage = response.data && response.data.error ? response.data.error : 'failed';
+            return { message: null, error: errorMessage };
+        }
+    } catch (error) {
+        return error;
+    }
+}
+// удаление поста пользователя
+export async function delPost(postId) {
+    try {
+        const token=Сookie.get('token')
+        const response = await axios.delete(`${import.meta.env.VITE_API_URL}/posts/${postId}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            withCredentials: true,
+        });
+
+        return response.data;
+    } catch (error) {
+        throw error;
     }
 }

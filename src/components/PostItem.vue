@@ -1,13 +1,24 @@
 <script setup>
-
+import { likeUser } from "@/api/like";
+import { delPost } from "@/api/post";
 import ButtonLite from "@/components/ui/ButtonLite.vue";
 import { defineProps } from 'vue';
+import { RouterLink } from "vue-router";
 
+const token = Сookie.get("token");
 const props = defineProps({
   post: Object
 });
 
 const post = props.post;
+
+async function likeUserSubmit(postId) {
+  likeUser(postId);
+}
+
+async function delPostSubmit(postId){
+  delPost(postId);
+}
 </script>
 
 <template>
@@ -17,8 +28,13 @@ const post = props.post;
           <img class="user-avarar" src="@/assets/img/UserAvatarDefault.png" alt="photo"/>
           <p class="user-name">{{ post.user_name }}</p>
         </div>
-        <ButtonLite>
+        <ButtonLite class="sub-del">
           <img class="sub-menu" src="../assets/img/icon/menu.png" alt="menu"/>
+          <DropdownBlock class="profile__dropdown-content">
+          <div class="dropdown-item">
+            <a type="submit" @click="delPostSubmit(post.post_id)">Удалить</a>
+          </div>
+        </DropdownBlock>
         </ButtonLite>
       </div>
       <div class="post__body">
@@ -26,14 +42,14 @@ const post = props.post;
         <img v-if="post.media_content !== null" class="post__img" :src="post.media_content" alt="photo" />
       </div>
       <div class="post__footer">
-        <div class="post__footer-item">
+        <div class="post__footer-item" @click="likeUserSubmit(post.post_id)">
           <img class="post__icon" src="@/assets/img/icon/like.png" alt="photo" />
           <p class="post__count">{{ post.count_like }}</p>
         </div>
-        <div class="post__footer-item">
+        <RouterLink :to="'/post/' + post.post_id" class="post__footer-item">
           <img class="post__icon" src="@/assets/img/icon/comment.png" alt="photo" />
           <p class="post__count">{{ post.count_comment }}</p>
-        </div>
+        </RouterLink>
       </div>
     </article>
 </template>
@@ -120,6 +136,39 @@ const post = props.post;
   width: 16px;
   height: 16px;
 }
+.sub-del {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--main-background-color);
+  background-color: var(--block-hover-background-color);
+  border-radius: 10px;
+  position: relative; /* Добавили position: relative */
+}
 
+.sub-del:hover {
+  cursor: pointer;
+}
 
+.profile__dropdown-content {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 38px;
+  z-index: 1;
+}
+
+.sub-del:hover > .profile__dropdown-content {
+  display: block;
+}
+
+.dropdown-item {
+  padding: 10px;
+
+}
+.dropdown-item a {
+  color: var(--primary-color);
+  font-size: 13px;
+  text-decoration: none;
+}
 </style>

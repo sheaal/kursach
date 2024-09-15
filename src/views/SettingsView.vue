@@ -1,9 +1,12 @@
 <script setup>
-
 import SidebarBlock from "@/components/SidebarBlock.vue";
 import HeaderApp from "@/components/HeaderApp.vue";
+import ButtonDefault from "@/components/ui/ButtonDefault.vue";
+import { delUser } from "@/api/user";
 
-
+async function delUserSubmit(){
+  delUser()
+}
 </script>
 
 <template>
@@ -29,16 +32,18 @@ import HeaderApp from "@/components/HeaderApp.vue";
           <h2 style="color: #7F85BC; padding: 50px 0 0 20px;">Внешний вид</h2>
           <div class="profile-header__content">
           </div>
-          <p style="color: #7F85BC; padding: 20px 0 0 20px;">Тема: Тёмная</p>
+          
         </div>
+        <ButtonDefault style="margin: 20px; width:200px; height: 40px; color: #984261;"  type="submit" @click="delUserSubmit()">Удалить аккаунт</ButtonDefault>
       </div>
+      
     </main>
   </section>
 </template>
 
 <style>
 .edit-sett{
-  background-color: #0F1118;
+  background-color: var(--block-background-color);
   width: 920px;
   height: 597px;
   border-radius: 10px;

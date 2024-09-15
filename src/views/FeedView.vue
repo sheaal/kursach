@@ -5,7 +5,6 @@ import PostItem from "@/components/PostItem.vue";
 import {onMounted, ref} from "vue";
 import {getFeedPost} from "@/api/feed.js";
 
-const userId = localStorage.getItem("userId");
 
 const posts = ref([])
 

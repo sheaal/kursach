@@ -3,11 +3,9 @@ import FeedView from "@/views/FeedView.vue";
 import RegistrationView from "@/views/RegistrationView.vue";
 import AuthorizationView from "@/views/AuthorizationView.vue";
 import ProfileView from "@/views/ProfileView.vue";
-import SubscribersView from "@/views/SubscribersView.vue";
 import LikesView from "@/views/LikesView.vue";
 import PostView from "@/views/PostView.vue";
 import SettingsView from "@/views/SettingsView.vue";
-import RightView from "@/views/RightView.vue";
 import CreatePostView from "@/views/CreatePostView.vue";
 
 const router = createRouter({
@@ -29,7 +27,7 @@ const router = createRouter({
       component: AuthorizationView,
     },
     {
-      path: '/post',
+      path: '/post/:postId',
       name: 'post',
       component: PostView
     },
@@ -37,12 +35,6 @@ const router = createRouter({
       path: '/profile',
       name: 'profile',
       component: ProfileView,
-      meta: { auth: true }
-    },
-    {
-      path: '/subscribers',
-      name: 'subscribers',
-      component: SubscribersView,
       meta: { auth: true }
     },
     {
@@ -58,12 +50,6 @@ const router = createRouter({
       meta: { auth: true }
     },
     {
-      path: '/right',
-      name: 'right',
-      component: RightView,
-      meta: { auth: true }
-    },
-    {
       path: '/create_post',
       name: 'create_post',
       component: CreatePostView,
@@ -74,7 +60,7 @@ const router = createRouter({
 
 // Проверка авторизации
 router.beforeEach((to, from, next) => {
-  const token = localStorage.getItem('token');
+  const token = Сookie.get('token');
 
   if (to.matched.some(record => record.meta.auth) && !token) {
     next({ name: 'login' });

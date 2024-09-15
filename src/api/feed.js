@@ -3,7 +3,7 @@ import axios from 'axios';
 // Получение ленты
 export async function getFeedPost() {
     try {
-        const token = localStorage.getItem("token");
+        const token = Сookie.get("token");
 
         const config = {
             headers: {
@@ -24,7 +24,6 @@ export async function getFeedPost() {
         );
 
         if (response.data) {
-            console.log(response.data);
             return response.data.data;
         } else {
             const errorMessage = response.data && response.data.error ? response.data.error : 'failed';
